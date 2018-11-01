@@ -1,0 +1,12 @@
+//Added following code in blockviewed.php around line 138:
+$product_properties = Product::getProductProperties($params['cookie']->id_lang,array('id_product' => $obj->id),null);
+$obj->price = $product_properties['price'];
+$obj->price_without_reduction = $product_properties['price_without_reduction'];
+$obj->specific_prices = $product_properties['specific_prices'];
+$obj->static_token = Tools::getToken(false);
+
+//Also added following code in blockviewed.tpl in theme folder:
+<p> {convertPrice price=$viewedProduct->price}</p>
+{if $viewedProduct->specific_prices AND $viewedProduct->specific_prices.reduction_type == 'percentage'}
+<p> {convertPrice price=$viewedProduct->price_without_reduction}</p>
+<p> -{$viewedProduct->specific_prices.reduction*100}% </p> {/if} 
